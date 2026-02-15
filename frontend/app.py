@@ -1,12 +1,11 @@
 """
 AI Resume-Job Matching System - Streamlit Frontend
 ==================================================
-Interactive web interface for the AI Resume Matcher.
-Provides an intuitive UI for uploading resumes, entering job descriptions,
-and viewing explainable match results with visualizations.
+Redesigned with premium dark SaaS aesthetic inspired by EOTY Labs.
+Glassmorphism, neon accents, and smooth interactions.
 
 Author: AI Resume Matcher Team
-Version: 1.0.0
+Version: 2.0.0 - Premium UI Update
 """
 
 import os
@@ -30,207 +29,851 @@ from parser import DocumentParser, parse_resume_bytes
 from skill_extractor import SkillExtractor
 from similarity import SimilarityEngine
 
-# Page configuration
+# ==========================================
+# PAGE CONFIGURATION
+# ==========================================
 st.set_page_config(
-    page_title="AI Resume Matcher",
-    page_icon="📄",
+    page_title="AI Resume Matcher | Intelligent Hiring",
+    page_icon="⚛",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="collapsed"  # Hidden for premium feel
 )
 
-# Custom CSS for styling
+# ==========================================
+# CUSTOM CSS - DARK GLASSMORPHISM THEME
+# ==========================================
 st.markdown("""
 <style>
-    .main-header {
-        font-size: 3rem;
-        font-weight: bold;
-        color: #1E88E5;
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+    /* Base Theme Override */
+    .stApp {
+        background: #000000;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Hide Streamlit Chrome */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stDeployButton {display: none;}
+
+    /* Animated Background Gradient Mesh */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(ellipse at 20% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 20%, rgba(52, 211, 153, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(6, 78, 59, 0.2) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
+        animation: pulseGradient 8s ease-in-out infinite;
+    }
+
+    @keyframes pulseGradient {
+        0%, 100% { opacity: 0.5; transform: scale(1); }
+        50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    /* Floating Navigation Bar */
+    .nav-container {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 100px;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        gap: 2rem;
+        align-items: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    .nav-logo {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: white;
+        letter-spacing: -0.02em;
+    }
+
+    .nav-logo span {
+        color: #10B981;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1.5rem;
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    .nav-links a {
+        color: inherit;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+        color: white;
+    }
+
+    .nav-cta {
+        background: white;
+        color: black;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+        background: #10B981;
+        color: white;
+    }
+
+    /* Main Content Spacing */
+    .main-content {
+        padding-top: 6rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Hero Section */
+    .hero-container {
         text-align: center;
+        padding: 4rem 2rem 6rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        color: #34D399;
+        margin-bottom: 2rem;
+        animation: fadeInDown 0.8s ease-out;
+    }
+
+    .hero-badge::before {
+        content: "◆";
+        color: #10B981;
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.03em;
+        margin-bottom: 1.5rem;
+        animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-title .gradient-text {
+        background: linear-gradient(135deg, #ffffff 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 2.5rem;
+        animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    /* Glowing CTA Button */
+    /* Glowing CTA Button */
+.glow-button {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: #FFFFFF !important;   /* Force white */
+    text-decoration: none !important;  /* Remove link styling */
+    padding: 1rem 2rem;
+    border-radius: 12px;   /* More professional than 100px */
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out 0.6s both;
+}
+
+/* Force white in all link states */
+.glow-button:link,
+.glow-button:visited,
+.glow-button:hover,
+.glow-button:active {
+    color: #FFFFFF !important;
+    text-decoration: none !important;
+}
+
+
+    .glow-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.6);
+    }
+
+    .glow-button::after {
+        content: "→";
+        transition: transform 0.2s;
+    }
+
+    .glow-button:hover::after {
+        transform: translateX(4px);
+    }
+
+    /* Feature Cards Grid */
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .feature-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 2rem;
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .feature-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, #10B981, transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .feature-card:hover {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(16, 185, 129, 0.3);
+        transform: translateY(-4px);
+    }
+
+    .feature-card:hover::before {
+        opacity: 1;
+    }
+
+    .feature-icon {
+        width: 48px;
+        height: 48px;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .feature-title {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: white;
         margin-bottom: 0.5rem;
     }
-    .sub-header {
-        font-size: 1.2rem;
-        color: #666;
-        text-align: center;
-        margin-bottom: 2rem;
+
+    .feature-desc {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.5;
     }
-    .score-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 15px;
+
+    /* Section Headers */
+    .section-header {
+        text-align: center;
+        padding: 4rem 2rem 2rem;
+    }
+
+    .section-label {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #10B981;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        color: white;
+        margin-bottom: 1rem;
+    }
+
+    .section-title .accent {
+        color: #10B981;
+    }
+
+    /* Split Screen Layouts */
+    .split-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        max-width: 1200px;
+        margin: 0 auto;
         padding: 2rem;
-        text-align: center;
+        align-items: center;
+    }
+
+    @media (max-width: 768px) {
+        .split-container {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    .visual-side {
+        position: relative;
+        height: 400px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(0, 0, 0, 0) 100%);
+        border-radius: 24px;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .visual-side::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.2) 0%, transparent 70%);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .content-side h3 {
+        font-size: 1.875rem;
+        font-weight: 700;
         color: white;
+        margin-bottom: 1.5rem;
     }
-    .score-value {
-        font-size: 4rem;
-        font-weight: bold;
+
+    .content-side p {
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
     }
-    .score-label {
-        font-size: 1.2rem;
-        opacity: 0.9;
+
+    /* Stats/Metrics Cards */
+    .metrics-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
     }
-    .skill-matched {
-        background-color: #4CAF50;
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        margin: 0.2rem;
-        display: inline-block;
-        font-size: 0.9rem;
+
+    @media (max-width: 768px) {
+        .metrics-row {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
-    .skill-missing {
-        background-color: #f44336;
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        margin: 0.2rem;
-        display: inline-block;
-        font-size: 0.9rem;
-    }
-    .skill-extra {
-        background-color: #2196F3;
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        margin: 0.2rem;
-        display: inline-block;
-        font-size: 0.9rem;
-    }
-    .explanation-box {
-        background-color: #f8f9fa;
-        border-left: 4px solid #1E88E5;
+
+    .metric-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
         padding: 1.5rem;
-        border-radius: 0 10px 10px 0;
-        margin: 1rem 0;
-    }
-    .metric-card {
-        background-color: white;
-        border-radius: 10px;
-        padding: 1.5rem;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         text-align: center;
+        backdrop-filter: blur(10px);
     }
-    .stTabs [data-baseweb="tab-list"] {
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, #ffffff 0%, #10B981 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .metric-label {
+        font-size: 0.875rem;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 0.5rem;
+    }
+
+    /* Process Steps */
+    .process-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .process-step {
+        display: flex;
         gap: 2rem;
+        margin-bottom: 3rem;
+        position: relative;
     }
+
+    .process-step::before {
+        content: "";
+        position: absolute;
+        left: 24px;
+        top: 60px;
+        width: 2px;
+        height: calc(100% + 1rem);
+        background: linear-gradient(180deg, #10B981 0%, transparent 100%);
+    }
+
+    .process-step:last-child::before {
+        display: none;
+    }
+
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 2px solid #10B981;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        color: #10B981;
+        flex-shrink: 0;
+        position: relative;
+        z-index: 1;
+    }
+
+    .step-content h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: white;
+        margin-bottom: 0.5rem;
+    }
+
+    .step-content p {
+        color: rgba(255, 255, 255, 0.5);
+        line-height: 1.6;
+    }
+
+    /* Dark Section (Solutions) */
+    .dark-section {
+        background: linear-gradient(180deg, rgba(6, 78, 59, 0.3) 0%, rgba(0, 0, 0, 0) 100%);
+        margin: 4rem 0;
+        padding: 4rem 2rem;
+        border-top: 1px solid rgba(16, 185, 129, 0.2);
+        border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    /* Skills Tags */
+    .skill-tag {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 100px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        margin: 0.25rem;
+        transition: all 0.2s;
+    }
+
+    .skill-matched {
+        background: rgba(16, 185, 129, 0.2);
+        color: #34D399;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .skill-missing {
+        background: rgba(239, 68, 68, 0.2);
+        color: #FCA5A5;
+        border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .skill-extra {
+        background: rgba(59, 130, 246, 0.2);
+        color: #93C5FD;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Scroll Reveal Animation Classes */
+    .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s ease-out;
+    }
+
+    .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* Custom Streamlit Overrides */
+    .stButton > button {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 12px !important;   /* 100px looks too pill-like */
+    padding: 0.75rem 2rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25) !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+
+    .stButton > button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 0 30px rgba(16, 185, 129, 0.5) !important;
+    }
+
+    .stTextArea > div > div {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+    }
+
+    .stFileUploader > div {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 2px dashed rgba(16, 185, 129, 0.3) !important;
+        border-radius: 16px !important;
+        padding: 2rem !important;
+    }
+
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 0.5rem;
+        border-radius: 100px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     .stTabs [data-baseweb="tab"] {
-        padding: 1rem 2rem;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.6);
+        border-radius: 100px;
+        padding: 0.75rem 1.5rem;
         font-weight: 500;
     }
+
+    .stTabs [aria-selected="true"] {
+        background: rgba(16, 185, 129, 0.2) !important;
+        color: #10B981 !important;
+    }
+
+    /* Dataframe Styling */
+    .dataframe {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+    }
+
+    /* Expander Styling */
+    .streamlit-expanderHeader {
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+    }
+
+    /* Success/Info/Warning Boxes */
+    .stSuccess, .stInfo, .stWarning {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        color: white !important;
+    }
+
+    .stSuccess { border-left: 4px solid #10B981 !important; }
+    .stInfo { border-left: 4px solid #3B82F6 !important; }
+    .stWarning { border-left: 4px solid #F59E0B !important; }
 </style>
+
+<script>
+// Scroll reveal animation
+document.addEventListener('DOMContentLoaded', function() {
+    const reveals = document.querySelectorAll('.reveal');
+
+    function reveal() {
+        reveals.forEach(element => {
+            const windowHeight = window.innerHeight;
+            const elementTop = element.getBoundingClientRect().top;
+            const elementVisible = 150;
+
+            if (elementTop < windowHeight - elementVisible) {
+                element.classList.add('active');
+            }
+        });
+    }
+
+    window.addEventListener('scroll', reveal);
+    reveal();
+});
+</script>
 """, unsafe_allow_html=True)
 
-# Initialize components
+
+# ==========================================
+# INITIALIZE COMPONENTS
+# ==========================================
 @st.cache_resource
 def get_parser():
     return DocumentParser()
+
 
 @st.cache_resource
 def get_skill_extractor():
     return SkillExtractor()
 
+
 @st.cache_resource
 def get_similarity_engine():
     return SimilarityEngine()
+
 
 parser = get_parser()
 skill_extractor = get_skill_extractor()
 similarity_engine = get_similarity_engine()
 
 
+# ==========================================
+# NAVIGATION COMPONENT
+# ==========================================
+def render_navigation():
+    st.markdown("""
+    <div class="nav-container">
+        <div class="nav-logo">RESUME<span>MATCHER</span></div>
+        <div class="nav-links">
+            <a href="#home">Overview</a>
+            <a href="#analyze">Analyze</a>
+            <a href="#batch">Batch</a>
+            <a href="#skills">Skills</a>
+        </div>
+        <button class="nav-cta" onclick="document.getElementById('analyze').scrollIntoView({behavior: 'smooth'})">Get Started</button>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ==========================================
+# HERO SECTION
+# ==========================================
+def render_hero():
+    st.markdown("""
+    <div class="hero-container" id="home">
+        <div class="hero-badge">AI-Powered Hiring Intelligence</div>
+        <h1 class="hero-title">
+            Verify to Trust<br>
+            <span class="gradient-text">AI Resume Matching</span>
+        </h1>
+        <p class="hero-subtitle">
+            Introducing explainable AI for recruitment. Verify candidate-job fit 
+            with semantic analysis, skill extraction, and transparent scoring.
+        </p>
+        <a href="#analyze" class="glow-button">Start Analysis</a>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ==========================================
+# FEATURES GRID
+# ==========================================
+def render_features():
+    features = [
+        ("◉", "AI-Powered", "State-of-the-art NLP models for semantic understanding of resumes and job descriptions."),
+        ("⌕", "Explainable", "Clear explanations of matching scores with detailed breakdowns and reasoning."),
+        ("⚡", "Lightning Fast", "Process multiple resumes in seconds with high-accuracy batch ranking."),
+        ("⚔", "Privacy First", "Local processing ensures your candidate data never leaves your infrastructure.")
+    ]
+
+    st.markdown('<div class="features-grid">', unsafe_allow_html=True)
+    for icon, title, desc in features:
+        st.markdown(f"""
+        <div class="feature-card">
+            <div class="feature-icon">{icon}</div>
+            <div class="feature-title">{title}</div>
+            <div class="feature-desc">{desc}</div>
+        </div>
+        """, unsafe_allow_html=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
+# ==========================================
+# CHART CREATION FUNCTIONS
+# ==========================================
 def create_gauge_chart(score: float, title: str = "Match Score") -> go.Figure:
-    """Create a gauge chart for match score visualization."""
+    """Create a futuristic gauge chart."""
     fig = go.Figure(go.Indicator(
         mode="gauge+number",
         value=score,
         domain={'x': [0, 1], 'y': [0, 1]},
-        title={'text': title, 'font': {'size': 24}},
+        title={'text': title, 'font': {'size': 20, 'color': 'white', 'family': 'Inter'}},
+        number={'font': {'size': 48, 'color': '#10B981', 'family': 'Inter'}, 'suffix': '%'},
         gauge={
-            'axis': {'range': [0, 100], 'tickwidth': 1},
-            'bar': {'color': "#1E88E5"},
-            'bgcolor': "white",
-            'borderwidth': 2,
-            'bordercolor': "#ccc",
+            'axis': {'range': [0, 100], 'tickwidth': 0, 'tickcolor': '#0B0F1A'},
+            'bar': {'color': "#10B981", 'thickness': 0.75},
+            'bgcolor': "rgba(255,255,255,0.05)",
+            'borderwidth': 0,
             'steps': [
-                {'range': [0, 40], 'color': '#ffebee'},
-                {'range': [40, 60], 'color': '#fff3e0'},
-                {'range': [60, 80], 'color': '#e8f5e9'},
-                {'range': [80, 100], 'color': '#e3f2fd'}
+                {'range': [0, 40], 'color': 'rgba(239, 68, 68, 0.2)'},
+                {'range': [40, 60], 'color': 'rgba(245, 158, 11, 0.2)'},
+                {'range': [60, 80], 'color': 'rgba(16, 185, 129, 0.2)'},
+                {'range': [80, 100], 'color': 'rgba(16, 185, 129, 0.4)'}
             ],
             'threshold': {
-                'line': {'color': "red", 'width': 4},
-                'thickness': 0.75,
+                'line': {'color': "#10B981", 'width': 2},
+                'thickness': 0.8,
                 'value': score
             }
         }
     ))
-    
+
     fig.update_layout(
-        height=350,
-        margin=dict(l=20, r=20, t=50, b=20),
+        height=300,
+        margin=dict(l=20, r=20, t=60, b=20),
         paper_bgcolor="rgba(0,0,0,0)",
-        plot_bgcolor="rgba(0,0,0,0)"
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={'family': 'Inter', 'color': 'white'}
     )
-    
+
     return fig
 
 
-def create_radar_chart(
-    resume_categories: Dict[str, List[str]], 
-    jd_categories: Dict[str, List[str]]
-) -> go.Figure:
-    """Create a radar chart comparing skill categories."""
+def create_radar_chart(resume_categories: Dict[str, List[str]],
+                       jd_categories: Dict[str, List[str]]) -> go.Figure:
+    """Create a dark-themed radar chart."""
     categories = list(set(list(resume_categories.keys()) + list(jd_categories.keys())))
     categories = [c for c in categories if c != 'Other']
-    
+
     resume_counts = [len(resume_categories.get(cat, [])) for cat in categories]
     jd_counts = [len(jd_categories.get(cat, [])) for cat in categories]
-    
+
     fig = go.Figure()
-    
+
     fig.add_trace(go.Scatterpolar(
         r=resume_counts + [resume_counts[0]],
         theta=categories + [categories[0]],
         fill='toself',
         name='Resume',
-        line_color='#2196F3',
-        fillcolor='rgba(33, 150, 243, 0.3)'
+        line_color='#10B981',
+        fillcolor='rgba(16, 185, 129, 0.2)',
+        line={'width': 2}
     ))
-    
+
     fig.add_trace(go.Scatterpolar(
         r=jd_counts + [jd_counts[0]],
         theta=categories + [categories[0]],
         fill='toself',
         name='Job Description',
-        line_color='#4CAF50',
-        fillcolor='rgba(76, 175, 80, 0.3)'
+        line_color='#3B82F6',
+        fillcolor='rgba(59, 130, 246, 0.2)',
+        line={'width': 2}
     ))
-    
+
     fig.update_layout(
         polar=dict(
             radialaxis=dict(
                 visible=True,
-                range=[0, max(max(resume_counts, default=0), max(jd_counts, default=0)) + 1]
-            )
+                range=[0, max(max(resume_counts, default=0), max(jd_counts, default=0)) + 1],
+                tickfont={'color': 'rgba(255,255,255,0.5)'},
+                gridcolor='rgba(255,255,255,0.1)'
+            ),
+            angularaxis=dict(
+                tickfont={'color': 'white', 'size': 12},
+                gridcolor='rgba(255,255,255,0.1)'
+            ),
+            bgcolor='rgba(255,255,255,0.03)'
         ),
         showlegend=True,
-        title="Skill Categories Comparison",
-        height=450
+        legend=dict(
+            font={'color': 'white'},
+            bgcolor='rgba(0,0,0,0)',
+            borderwidth=0
+        ),
+        title=dict(
+            text="Skill Categories",
+            font={'color': 'white', 'size': 16},
+            x=0.5
+        ),
+        height=400,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)"
     )
-    
+
     return fig
 
 
-def create_skills_bar_chart(
-    matched: List[str],
-    missing: List[str],
-    extra: List[str]
-) -> go.Figure:
-    """Create a bar chart showing skill comparison."""
+def create_skills_bar_chart(matched: List[str], missing: List[str], extra: List[str]) -> go.Figure:
+    """Create a dark-themed bar chart."""
     categories = ['Matched', 'Missing', 'Extra']
     counts = [len(matched), len(missing), len(extra)]
-    colors = ['#4CAF50', '#f44336', '#2196F3']
-    
+    colors = ['#10B981', '#EF4444', '#3B82F6']
+
     fig = go.Figure(data=[
         go.Bar(
             x=categories,
@@ -238,44 +881,52 @@ def create_skills_bar_chart(
             marker_color=colors,
             text=counts,
             textposition='auto',
+            textfont={'color': 'white', 'size': 14},
+            marker=dict(
+                line=dict(color='rgba(255,255,255,0.1)', width=1)
+            )
         )
     ])
-    
+
     fig.update_layout(
-        title="Skills Overview",
-        xaxis_title="Skill Type",
-        yaxis_title="Count",
-        height=350,
-        showlegend=False
+        title=dict(
+            text="Skills Overview",
+            font={'color': 'white', 'size': 16},
+            x=0.5
+        ),
+        xaxis=dict(
+            tickfont={'color': 'white'},
+            gridcolor='rgba(255,255,255,0.1)'
+        ),
+        yaxis=dict(
+            tickfont={'color': 'rgba(255,255,255,0.5)'},
+            gridcolor='rgba(255,255,255,0.1)',
+            zerolinecolor='rgba(255,255,255,0.1)'
+        ),
+        height=300,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(255,255,255,0.03)",
+        font={'family': 'Inter'}
     )
-    
+
     return fig
 
 
-def display_skill_tags(skills: List[str], tag_type: str = "matched"):
-    """Display skills as colored tags."""
-    css_class = f"skill-{tag_type}"
-    tags_html = " ".join([f'<span class="{css_class}">{skill}</span>' for skill in skills])
-    st.markdown(tags_html, unsafe_allow_html=True)
-
-
+# ==========================================
+# ANALYSIS FUNCTIONS
+# ==========================================
 def analyze_single_resume(resume_bytes: bytes, filename: str, jd_text: str) -> Dict:
     """Perform full analysis on a single resume."""
-    # Parse resume
     parsed = parse_resume_bytes(resume_bytes, filename)
-    
+
     if not parsed['success']:
         st.error(f"Failed to parse resume: {parsed.get('error', 'Unknown error')}")
         return None
-    
-    # Extract skills
+
     resume_skills = skill_extractor.extract_skills(parsed['text'])
     jd_skills = skill_extractor.extract_skills(jd_text)
-    
-    # Compare skills
     skill_comparison = skill_extractor.compare_skills(resume_skills, jd_skills)
-    
-    # Calculate similarity
+
     similarity_result = similarity_engine.calculate_similarity(
         resume_text=parsed['text'],
         jd_text=jd_text,
@@ -284,7 +935,7 @@ def analyze_single_resume(resume_bytes: bytes, filename: str, jd_text: str) -> D
         matched_skills=skill_comparison['matched_skills'],
         missing_skills=skill_comparison['missing_skills']
     )
-    
+
     return {
         'resume_info': parsed,
         'resume_skills': resume_skills,
@@ -294,295 +945,121 @@ def analyze_single_resume(resume_bytes: bytes, filename: str, jd_text: str) -> D
     }
 
 
-def render_home_page():
-    """Render the home page with overview."""
-    st.markdown('<h1 class="main-header">📄 AI Resume Matcher</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Intelligent Resume-Job Matching with Explainable AI</p>', unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns(3)
-    
-    with col1:
-        st.markdown("""
-        <div class="metric-card">
-            <h3>🤖 AI-Powered</h3>
-            <p>Uses state-of-the-art NLP models (Sentence Transformers) for semantic understanding</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class="metric-card">
-            <h3>📊 Explainable</h3>
-            <p>Get clear explanations of why a candidate matches or doesn't match</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div class="metric-card">
-            <h3>⚡ Fast & Accurate</h3>
-            <p>Process multiple resumes in seconds with high accuracy</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    st.subheader("How It Works")
-    
-    steps = [
-        ("1️⃣", "Upload Resume", "Upload a PDF or DOCX resume file"),
-        ("2️⃣", "Enter Job Description", "Paste the job description text"),
-        ("3️⃣", "Get Match Score", "Receive a detailed match analysis with explanations"),
-        ("4️⃣", "Download Report", "Generate and download a PDF report")
-    ]
-    
-    for emoji, title, desc in steps:
-        col1, col2 = st.columns([1, 4])
-        with col1:
-            st.markdown(f"<h2 style='text-align: center;'>{emoji}</h2>", unsafe_allow_html=True)
-        with col2:
-            st.markdown(f"**{title}** {desc}")
-
-    
-    st.markdown("---")
-    
-    st.info("👈 Use the sidebar to navigate to different features: Single Match, Batch Ranking, or Skills Analysis")
-
-
-def render_single_match_page():
-    """Render the single resume matching page."""
-    st.markdown('<h1 class="main-header">Single Resume Analysis</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Upload a resume and compare with a job description</p>', unsafe_allow_html=True)
-    
-    # Input section
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("📄 Upload Resume")
-        resume_file = st.file_uploader(
-            "Choose a PDF or DOCX file",
-            type=['pdf', 'docx', 'doc'],
-            help="Upload the candidate's resume"
-        )
-        
-        if resume_file:
-            st.success(f"✅ Uploaded: {resume_file.name}")
-    
-    with col2:
-        st.subheader("💼 Job Description")
-        jd_text = st.text_area(
-            "Paste the job description here",
-            height=200,
-            help="Enter the full job description text"
-        )
-        
-        # Sample job descriptions
-        with st.expander("📋 Use Sample Job Description"):
-            sample_jds = {
-                "Python Developer": """We are looking for a Senior Python Developer with 5+ years of experience.
-Required skills: Python, Django, FastAPI, SQL, Docker, AWS.
-Experience with microservices and REST APIs is essential.
-Knowledge of Machine Learning is a plus.""",
-                
-                "Data Scientist": """Seeking a Data Scientist with expertise in Python, Machine Learning, and Deep Learning.
-Required: TensorFlow, PyTorch, Pandas, NumPy, SQL.
-Experience with NLP and Computer Vision preferred.
-Strong statistical background required.""",
-                
-                "DevOps Engineer": """Hiring a DevOps Engineer with strong experience in AWS, Docker, Kubernetes.
-Required: CI/CD, Jenkins, Terraform, Linux, Python.
-Experience with monitoring tools and cloud infrastructure.
-Knowledge of security best practices."""
-            }
-            
-            selected_sample = st.selectbox(
-                "Select a sample job description",
-                ["None"] + list(sample_jds.keys())
-            )
-            
-            if selected_sample != "None":
-                jd_text = sample_jds[selected_sample]
-                st.info(f"Loaded sample: {selected_sample}")
-    
-    # Analysis button
-    if resume_file and jd_text:
-        if st.button("🔍 Analyze Match", type="primary", use_container_width=True):
-            with st.spinner("Analyzing resume... This may take a moment"):
-                # Read resume bytes
-                resume_bytes = resume_file.getvalue()
-                
-                # Perform analysis
-                result = analyze_single_resume(resume_bytes, resume_file.name, jd_text)
-                
-                if result:
-                    display_analysis_results(result)
-    elif resume_file or jd_text:
-        st.warning("⚠️ Please provide both resume and job description")
+# ==========================================
+# DISPLAY FUNCTIONS
+# ==========================================
+def display_skill_tags(skills: List[str], tag_type: str = "matched"):
+    """Display skills as styled tags."""
+    css_class = f"skill-tag skill-{tag_type}"
+    tags_html = "".join([f'<span class="{css_class}">{skill}</span>' for skill in skills])
+    st.markdown(f'<div style="line-height: 2;">{tags_html}</div>', unsafe_allow_html=True)
 
 
 def display_analysis_results(result: Dict):
-    """Display the analysis results."""
-    st.markdown("---")
-    st.subheader("📊 Analysis Results")
-    
-    # Top metrics row
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        score = result['similarity'].match_score
-        color = "#4CAF50" if score >= 80 else "#FFC107" if score >= 60 else "#f44336"
-        st.markdown(f"""
-        <div class="metric-card">
-            <h4 style="color: #666;">Match Score</h4>
-            <h1 style="color: {color}; font-size: 3rem; margin: 0;">{score:.1f}%</h1>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown(f"""
-        <div class="metric-card">
-            <h4 style="color: #666;">Semantic Similarity</h4>
-            <h1 style="color: #2196F3; font-size: 2.5rem; margin: 0;">{result['similarity'].semantic_similarity:.1f}%</h1>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        matched_count = len(result['skill_comparison']['matched_skills'])
-        total_jd_skills = len(result['jd_skills'].all_skills)
-        st.markdown(f"""
-        <div class="metric-card">
-            <h4 style="color: #666;">Skills Matched</h4>
-            <h1 style="color: #4CAF50; font-size: 2.5rem; margin: 0;">{matched_count}/{total_jd_skills}</h1>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col4:
-        missing_count = len(result['skill_comparison']['missing_skills'])
-        st.markdown(f"""
-        <div class="metric-card">
-            <h4 style="color: #666;">Missing Skills</h4>
-            <h1 style="color: #f44336; font-size: 2.5rem; margin: 0;">{missing_count}</h1>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
+    """Display analysis results with premium styling."""
+    score = result['similarity'].match_score
+
+    # Metrics Row
+    st.markdown("""
+    <div class="section-header" style="padding-top: 2rem;">
+        <div class="section-label">Analysis Results</div>
+        <h2 class="section-title">Match <span class="accent">Verification</span></h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    cols = st.columns(4)
+    metrics = [
+        (f"{score:.1f}%", "Match Score", "#10B981" if score >= 60 else "#EF4444"),
+        (f"{result['similarity'].semantic_similarity:.1f}%", "Semantic", "#3B82F6"),
+        (f"{len(result['skill_comparison']['matched_skills'])}", "Skills Matched", "#10B981"),
+        (f"{len(result['skill_comparison']['missing_skills'])}", "Gaps", "#EF4444")
+    ]
+
+    for col, (value, label, color) in zip(cols, metrics):
+        with col:
+            st.markdown(f"""
+            <div class="metric-box">
+                <div class="metric-value" style="background: linear-gradient(135deg, {color} 0%, #ffffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{value}</div>
+                <div class="metric-label">{label}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
     # Tabs for detailed analysis
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Overview", "🔧 Skills Analysis", "📝 Explanation", "📋 Raw Data"])
-    
+    tab1, tab2, tab3, tab4 = st.tabs(["🗒 Overview", "⚙ Skills", "ℹ Explanation", "⧉ Data"])
+
     with tab1:
-        col1, col2 = st.columns([2, 3])
-        
+        col1, col2 = st.columns([1, 2])
         with col1:
-            # Gauge chart
             fig = create_gauge_chart(result['similarity'].match_score)
-            st.plotly_chart(fig, use_container_width=True)
-        
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
         with col2:
-            # Radar chart
             fig = create_radar_chart(
                 result['resume_skills'].skill_categories,
                 result['jd_skills'].skill_categories
             )
-            st.plotly_chart(fig, use_container_width=True)
-    
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
     with tab2:
         col1, col2 = st.columns(2)
-        
+
         with col1:
-            st.subheader("✅ Matched Skills")
+            st.markdown("#### ✓ Matched Skills")
             if result['skill_comparison']['matched_skills']:
                 display_skill_tags(result['skill_comparison']['matched_skills'], "matched")
             else:
-                st.info("No matched skills found")
-            
-            st.markdown("<br>", unsafe_allow_html=True)
-            
-            st.subheader("❌ Missing Skills")
+                st.info("No matched skills found", icon="⚠")
+
+            st.markdown("#### ↔ Skill Gaps")
             if result['skill_comparison']['missing_skills']:
                 display_skill_tags(result['skill_comparison']['missing_skills'], "missing")
             else:
                 st.success("No missing skills - perfect match!")
-        
+
         with col2:
-            # Skills bar chart
             fig = create_skills_bar_chart(
                 result['skill_comparison']['matched_skills'],
                 result['skill_comparison']['missing_skills'],
                 result['skill_comparison']['extra_skills']
             )
-            st.plotly_chart(fig, use_container_width=True)
-            
-            # Skill categories comparison
-            st.subheader("📊 Skill Categories")
-            comparison_data = []
-            all_categories = set(
-                list(result['resume_skills'].skill_categories.keys()) + 
-                list(result['jd_skills'].skill_categories.keys())
-            )
-            
-            for cat in all_categories:
-                if cat != 'Other':
-                    comparison_data.append({
-                        'Category': cat,
-                        'Resume': len(result['resume_skills'].skill_categories.get(cat, [])),
-                        'Job Description': len(result['jd_skills'].skill_categories.get(cat, []))
-                    })
-            
-            if comparison_data:
-                import pandas as pd
-                df = pd.DataFrame(comparison_data)
-                st.dataframe(df, use_container_width=True, hide_index=True)
-    
+            st.plotly_chart(fig, use_container_width=True, config={'displayModeBar': False})
+
     with tab3:
-        st.subheader("🤖 AI Explanation")
-        st.markdown(f"""
-        <div class="explanation-box">
-            {result['similarity'].explanation}
+        st.markdown("""
+        <div style="background: rgba(16, 185, 129, 0.05); border: 1px solid rgba(16, 185, 129, 0.2); 
+                    border-radius: 16px; padding: 2rem; margin: 1rem 0;">
+            <h4 style="color: #10B981; margin-bottom: 1rem;">⦿ AI Explanation</h4>
+            <p style="color: rgba(255,255,255,0.8); line-height: 1.7; font-size: 1rem;">
+                {explanation}
+            </p>
         </div>
-        """, unsafe_allow_html=True)
-        
-        st.subheader("📊 Score Breakdown")
+        """.format(explanation=result['similarity'].explanation), unsafe_allow_html=True)
+
         breakdown = result['similarity'].detailed_breakdown
-        
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            st.metric(
-                "Semantic Similarity",
-                f"{result['similarity'].semantic_similarity:.1f}%",
-                f"Weight: {breakdown['semantic_similarity']['weight']:.0%}"
-            )
-        
-        with col2:
-            st.metric(
-                "Skill Match",
-                f"{result['similarity'].skill_match_score:.1f}%",
-                f"Weight: {breakdown['skill_similarity']['weight']:.0%}"
-            )
-        
-        with col3:
-            st.metric(
-                "Experience Match",
-                f"{breakdown['experience_similarity']['score']*100:.1f}%",
-                f"Weight: {breakdown['experience_similarity']['weight']:.0%}"
-            )
-    
+        cols = st.columns(3)
+        with cols[0]:
+            st.metric("Semantic", f"{result['similarity'].semantic_similarity:.1f}%",
+                      f"Weight: {breakdown['semantic_similarity']['weight']:.0%}")
+        with cols[1]:
+            st.metric("Skills", f"{result['similarity'].skill_match_score:.1f}%",
+                      f"Weight: {breakdown['skill_similarity']['weight']:.0%}")
+        with cols[2]:
+            st.metric("Experience", f"{breakdown['experience_similarity']['score'] * 100:.1f}%",
+                      f"Weight: {breakdown['experience_similarity']['weight']:.0%}")
+
     with tab4:
         st.json({
-            "resume_info": {
+            "resume": {
                 "filename": result['resume_info']['filename'],
-                "format": result['resume_info']['format'],
-                "page_count": result['resume_info']['page_count'],
+                "pages": result['resume_info']['page_count'],
                 "text_length": len(result['resume_info']['text'])
             },
             "skills": {
-                "resume_technical": result['resume_skills'].technical_skills,
-                "resume_soft": result['resume_skills'].soft_skills,
-                "jd_technical": result['jd_skills'].technical_skills,
-                "jd_soft": result['jd_skills'].soft_skills
+                "matched": len(result['skill_comparison']['matched_skills']),
+                "missing": len(result['skill_comparison']['missing_skills']),
+                "extra": len(result['skill_comparison']['extra_skills'])
             },
-            "match_scores": {
+            "scores": {
                 "overall": result['similarity'].match_score,
                 "semantic": result['similarity'].semantic_similarity,
                 "skill": result['similarity'].skill_match_score
@@ -590,291 +1067,213 @@ def display_analysis_results(result: Dict):
         })
 
 
-def render_batch_ranking_page():
-    """Render the batch resume ranking page."""
-    st.markdown('<h1 class="main-header">Batch Resume Ranking</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Upload multiple resumes and rank them against a job description</p>', unsafe_allow_html=True)
-    
-    # Job description input
-    st.subheader("💼 Job Description")
-    jd_text = st.text_area(
-        "Paste the job description here",
-        height=150,
-        key="batch_jd"
+# ==========================================
+# PAGE RENDERERS
+# ==========================================
+def render_single_match():
+    """Render the single resume matching page."""
+    st.markdown("""
+    <div class="section-header" id="analyze">
+        <div class="section-label">Single Analysis</div>
+        <h2 class="section-title">Analyze <span class="accent">Resume</span></h2>
+        <p style="color: rgba(255,255,255,0.5); max-width: 600px; margin: 0 auto;">
+            Upload a candidate resume and compare it against a job description 
+            to get detailed matching insights.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("### ⇪ Resume Upload")
+        resume_file = st.file_uploader(
+            "Drop resume here (PDF/DOCX)",
+            type=['pdf', 'docx', 'doc'],
+            help="Upload candidate resume"
+        )
+        if resume_file:
+            st.success(f"✓ {resume_file.name}")
+
+    with col2:
+        st.markdown("### ⧉ Job Description")
+
+        # Sample selector
+        samples = {
+            "Python Developer": """Senior Python Developer role requiring 5+ years experience.
+Skills: Python, Django, FastAPI, PostgreSQL, Docker, AWS, Microservices, REST APIs.""",
+            "Data Scientist": """Data Scientist position. Required: Python, Machine Learning, 
+TensorFlow, PyTorch, SQL, Statistics, NLP, Computer Vision.""",
+            "DevOps Engineer": """DevOps Engineer. Must have: AWS, Docker, Kubernetes, 
+CI/CD, Jenkins, Terraform, Linux, Python, Security."""
+        }
+
+        sample = st.selectbox("Load sample", ["Custom"] + list(samples.keys()))
+        jd_text = samples[sample] if sample != "Custom" else ""
+
+        jd_text = st.text_area(
+            "Job description text",
+            value=jd_text,
+            height=200
+        )
+
+    if resume_file and jd_text:
+        if st.button("⌕ Analyze Match", use_container_width=True):
+            with st.spinner("Processing..."):
+                result = analyze_single_resume(
+                    resume_file.getvalue(),
+                    resume_file.name,
+                    jd_text
+                )
+                if result:
+                    display_analysis_results(result)
+
+
+def render_batch_ranking():
+    """Render batch ranking with premium UI."""
+    st.markdown("""
+    <div class="section-header" id="batch">
+        <div class="section-label">Batch Processing</div>
+        <h2 class="section-title">Rank <span class="accent">Candidates</span></h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    jd_text = st.text_area("Job Description", height=100, key="batch_jd")
+    files = st.file_uploader(
+        "Upload multiple resumes",
+        type=['pdf', 'docx'],
+        accept_multiple_files=True
     )
-    
-    # Multiple file upload
-    st.subheader("📄 Upload Resumes")
-    resume_files = st.file_uploader(
-        "Choose multiple PDF or DOCX files",
-        type=['pdf', 'docx', 'doc'],
-        accept_multiple_files=True,
-        help="Upload multiple resumes to compare"
-    )
-    
-    if resume_files:
-        st.success(f"✅ Uploaded {len(resume_files)} resume(s)")
-        
-        # List uploaded files
-        with st.expander("📋 Uploaded Files"):
-            for i, file in enumerate(resume_files, 1):
-                st.write(f"{i}. {file.name}")
-    
-    # Analyze button
-    if resume_files and jd_text:
-        if st.button("🔍 Rank All Resumes", type="primary", use_container_width=True):
-            with st.spinner("Analyzing all resumes... This may take a moment"):
-                # Extract JD skills once
+
+    if files and jd_text:
+        st.success(f"📎 {len(files)} files ready")
+
+        if st.button("⊞ Rank All Candidates", use_container_width=True):
+            with st.spinner("Analyzing batch..."):
                 jd_skills = skill_extractor.extract_skills(jd_text)
-                
-                # Process each resume
                 results = []
-                progress_bar = st.progress(0)
-                
-                for i, resume_file in enumerate(resume_files):
-                    resume_bytes = resume_file.getvalue()
-                    parsed = parse_resume_bytes(resume_bytes, resume_file.filename)
-                    
+                progress = st.progress(0)
+
+                for i, file in enumerate(files):
+                    parsed = parse_resume_bytes(file.getvalue(), file.name)
                     if parsed['success']:
-                        resume_skills = skill_extractor.extract_skills(parsed['text'])
-                        skill_comparison = skill_extractor.compare_skills(resume_skills, jd_skills)
-                        
-                        similarity_result = similarity_engine.calculate_similarity(
-                            resume_text=parsed['text'],
-                            jd_text=jd_text,
-                            resume_skills=resume_skills.all_skills,
-                            jd_skills=jd_skills.all_skills,
-                            matched_skills=skill_comparison['matched_skills'],
-                            missing_skills=skill_comparison['missing_skills']
+                        r_skills = skill_extractor.extract_skills(parsed['text'])
+                        comparison = skill_extractor.compare_skills(r_skills, jd_skills)
+                        sim = similarity_engine.calculate_similarity(
+                            parsed['text'], jd_text,
+                            r_skills.all_skills, jd_skills.all_skills,
+                            comparison['matched_skills'], comparison['missing_skills']
                         )
-                        
                         results.append({
-                            'filename': resume_file.name,
-                            'match_score': similarity_result.match_score,
-                            'semantic_similarity': similarity_result.semantic_similarity,
-                            'skill_match_score': similarity_result.skill_match_score,
-                            'matched_skills': skill_comparison['matched_skills'],
-                            'missing_skills': skill_comparison['missing_skills'],
-                            'explanation': similarity_result.explanation
+                            'name': file.name,
+                            'score': sim.match_score,
+                            'matched': len(comparison['matched_skills']),
+                            'explanation': sim.explanation
                         })
-                    
-                    progress_bar.progress((i + 1) / len(resume_files))
-                
-                # Sort by match score
-                results.sort(key=lambda x: x['match_score'], reverse=True)
-                
-                # Display results
-                display_batch_results(results)
+                    progress.progress((i + 1) / len(files))
+
+                results.sort(key=lambda x: x['score'], reverse=True)
+
+                # Display leaderboard
+                st.markdown("### ♕ Candidate Rankings")
+                for i, r in enumerate(results[:5], 1):
+                    medal = "①" if i == 1 else "②" if i == 2 else "③" if i == 3 else f"#{i}"
+                    color = "#10B981" if r['score'] >= 80 else "#F59E0B" if r['score'] >= 60 else "#EF4444"
+
+                    with st.expander(f"{medal} {r['name']} — {r['score']:.1f}%"):
+                        cols = st.columns([1, 3])
+                        with cols[0]:
+                            st.markdown(f"""
+                            <div style="text-align: center; padding: 1rem; 
+                                        background: rgba(255,255,255,0.05); border-radius: 12px;">
+                                <div style="font-size: 2rem; font-weight: 800; color: {color};">
+                                    {r['score']:.0f}%
+                                </div>
+                                <div style="font-size: 0.875rem; color: rgba(255,255,255,0.5);">
+                                    {r['matched']} skills
+                                </div>
+                            </div>
+                            """, unsafe_allow_html=True)
+                        with cols[1]:
+                            st.write(r['explanation'])
 
 
-def display_batch_results(results: List[Dict]):
-    """Display batch ranking results."""
-    st.markdown("---")
-    st.subheader("📊 Ranking Results")
-    
-    # Top 3 podium
-    if len(results) >= 3:
-        st.markdown("### 🏆 Top Candidates")
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            if len(results) > 1:
-                st.markdown(f"""
-                <div style="background: linear-gradient(135deg, #C0C0C0 0%, #E8E8E8 100%); 
-                            padding: 1.5rem; border-radius: 15px; text-align: center;">
-                    <h2>🥈 2nd Place</h2>
-                    <h4>{results[1]['filename']}</h4>
-                    <h1 style="color: #1E88E5;">{results[1]['match_score']:.1f}%</h1>
-                </div>
-                """, unsafe_allow_html=True)
-        
-        with col2:
-            st.markdown(f"""
-            <div style="background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); 
-                        padding: 2rem; border-radius: 15px; text-align: center;
-                        transform: scale(1.1);">
-                <h2>🥇 1st Place</h2>
-                <h4>{results[0]['filename']}</h4>
-                <h1 style="color: #1E88E5; font-size: 3rem;">{results[0]['match_score']:.1f}%</h1>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        with col3:
-            if len(results) > 2:
-                st.markdown(f"""
-                <div style="background: linear-gradient(135deg, #CD7F32 0%, #D2691E 100%); 
-                            padding: 1.5rem; border-radius: 15px; text-align: center;">
-                    <h2>🥉 3rd Place</h2>
-                    <h4>{results[2]['filename']}</h4>
-                    <h1 style="color: #1E88E5;">{results[2]['match_score']:.1f}%</h1>
-                </div>
-            """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Full ranking table
-    st.markdown("### 📋 Complete Rankings")
-    
-    import pandas as pd
-    
-    df_data = []
-    for i, r in enumerate(results, 1):
-        df_data.append({
-            'Rank': i,
-            'Resume': r['filename'],
-            'Match Score': f"{r['match_score']:.1f}%",
-            'Semantic': f"{r['semantic_similarity']:.1f}%",
-            'Skills': f"{r['skill_match_score']:.1f}%",
-            'Matched': len(r['matched_skills']),
-            'Missing': len(r['missing_skills'])
-        })
-    
-    df = pd.DataFrame(df_data)
-    
-    # Color code the match score column
-    def color_score(val):
-        score = float(val.replace('%', ''))
-        if score >= 80:
-            return 'background-color: #c8e6c9'
-        elif score >= 60:
-            return 'background-color: #fff9c4'
-        else:
-            return 'background-color: #ffcdd2'
-    
-    styled_df = df.style.applymap(color_score, subset=['Match Score'])
-    st.dataframe(styled_df, use_container_width=True, hide_index=True)
-    
-    # Detailed view for each candidate
-    st.markdown("### 🔍 Detailed Analysis")
-    
-    for i, r in enumerate(results, 1):
-        with st.expander(f"#{i} - {r['filename']} ({r['match_score']:.1f}% match)"):
+def render_skills_analysis():
+    """Render skills extraction page."""
+    st.markdown("""
+    <div class="section-header" id="skills">
+        <div class="section-label">Skills Engine</div>
+        <h2 class="section-title">Extract <span class="accent">Skills</span></h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    text = st.text_area("Paste text to analyze", height=250)
+
+    if text and st.button("⌬ Extract Skills", use_container_width=True):
+        with st.spinner("Processing..."):
+            skills = skill_extractor.extract_skills(text)
+
             col1, col2 = st.columns(2)
-            
+
             with col1:
-                st.markdown("**✅ Matched Skills:**")
-                if r['matched_skills']:
-                    display_skill_tags(r['matched_skills'][:10], "matched")
+                st.markdown("### ⚙ Technical")
+                if skills.technical_skills:
+                    display_skill_tags(skills.technical_skills, "matched")
                 else:
-                    st.info("No matched skills")
-            
+                    st.info("No technical skills detected")
+
             with col2:
-                st.markdown("**❌ Missing Skills:**")
-                if r['missing_skills']:
-                    display_skill_tags(r['missing_skills'][:10], "missing")
+                st.markdown("### ⌘ Soft Skills")
+                if skills.soft_skills:
+                    display_skill_tags(skills.soft_skills, "extra")
                 else:
-                    st.success("No missing skills")
-            
-            st.markdown("**📝 Explanation:**")
-            st.write(r['explanation'])
+                    st.info("No soft skills detected")
+
+            # Categories
+            st.markdown("### ⟡ Categories")
+            import pandas as pd
+            cat_data = [{'Category': k, 'Count': len(v)}
+                        for k, v in skills.skill_categories.items() if v and k != 'Other']
+            if cat_data:
+                df = pd.DataFrame(cat_data).sort_values('Count', ascending=False)
+                st.dataframe(df, use_container_width=True, hide_index=True)
 
 
-def render_skills_analysis_page():
-    """Render the skills analysis page."""
-    st.markdown('<h1 class="main-header">Skills Analysis</h1>', unsafe_allow_html=True)
-    st.markdown('<p class="sub-header">Extract and analyze skills from any text</p>', unsafe_allow_html=True)
-    
-    text_input = st.text_area(
-        "Paste text to analyze (resume or job description)",
-        height=300,
-        help="Enter any text to extract skills from it"
-    )
-    
-    if text_input:
-        if st.button("🔍 Extract Skills", type="primary"):
-            with st.spinner("Analyzing text..."):
-                skills_result = skill_extractor.extract_skills(text_input)
-                
-                st.markdown("---")
-                
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    st.subheader("🔧 Technical Skills")
-                    st.markdown(f"**Count: {len(skills_result.technical_skills)}**")
-                    if skills_result.technical_skills:
-                        display_skill_tags(skills_result.technical_skills, "matched")
-                    else:
-                        st.info("No technical skills found")
-                
-                with col2:
-                    st.subheader("🤝 Soft Skills")
-                    st.markdown(f"**Count: {len(skills_result.soft_skills)}**")
-                    if skills_result.soft_skills:
-                        display_skill_tags(skills_result.soft_skills, "extra")
-                    else:
-                        st.info("No soft skills found")
-                
-                st.markdown("---")
-                
-                st.subheader("📊 Skill Categories")
-                
-                import pandas as pd
-                
-                category_data = []
-                for category, skills in skills_result.skill_categories.items():
-                    if skills:
-                        category_data.append({
-                            'Category': category,
-                            'Count': len(skills),
-                            'Skills': ', '.join(skills[:5]) + ('...' if len(skills) > 5 else '')
-                        })
-                
-                if category_data:
-                    df = pd.DataFrame(category_data)
-                    df = df.sort_values('Count', ascending=False)
-                    st.dataframe(df, use_container_width=True, hide_index=True)
-                    
-                    # Bar chart
-                    fig = px.bar(
-                        df,
-                        x='Category',
-                        y='Count',
-                        title='Skills by Category',
-                        color='Count',
-                        color_continuous_scale='viridis'
-                    )
-                    st.plotly_chart(fig, use_container_width=True)
-                else:
-                    st.info("No categorized skills found")
-
-
+# ==========================================
+# MAIN APPLICATION
+# ==========================================
 def main():
-    """Main application entry point."""
-    # Sidebar navigation
-    st.sidebar.title("📄 AI Resume Matcher")
-    st.sidebar.markdown("---")
-    
-    page = st.sidebar.radio(
-        "Navigation",
-        ["🏠 Home", "🔍 Single Match", "📊 Batch Ranking", "🔧 Skills Analysis"]
-    )
-    
-    st.sidebar.markdown("---")
-    st.sidebar.info("""
-    **About**
-    
-    This AI-powered tool uses NLP and machine learning to:
-    - Parse resumes (PDF/DOCX)
-    - Extract skills automatically
-    - Calculate semantic similarity
-    - Provide explainable match scores
-    
-    **Tech Stack:**
-    - FastAPI + Streamlit
-    - Sentence Transformers
-    - SpaCy + scikit-learn
-    """)
-    
-    # Render selected page
-    if page == "🏠 Home":
-        render_home_page()
-    elif page == "🔍 Single Match":
-        render_single_match_page()
-    elif page == "📊 Batch Ranking":
-        render_batch_ranking_page()
-    elif page == "🔧 Skills Analysis":
-        render_skills_analysis_page()
+    render_navigation()
+
+    st.markdown('<div class="main-content">', unsafe_allow_html=True)
+
+    # Hero Section
+    render_hero()
+    render_features()
+
+    # Analysis Section
+    st.markdown('<div style="margin-top: 4rem;">', unsafe_allow_html=True)
+    render_single_match()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Batch Section
+    st.markdown('<div class="dark-section">', unsafe_allow_html=True)
+    render_batch_ranking()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    # Skills Section
+    render_skills_analysis()
+
+    # Footer
+    st.markdown("""
+    <div style="text-align: center; padding: 4rem 2rem; border-top: 1px solid rgba(255,255,255,0.1); margin-top: 4rem;">
+        <p style="color: rgba(255,255,255,0.4); font-size: 0.875rem;">
+            AI Resume Matcher • Explainable AI for Intelligent Hiring
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 if __name__ == "__main__":
