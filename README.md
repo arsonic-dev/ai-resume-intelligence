@@ -24,35 +24,35 @@ This platform introduces a hybrid scoring pipeline that combines:
 # 🖥️ Product Interface Walkthrough
 
 ## 1️⃣ Landing – Hero Section
-![Hero Section](assets/screenshots/01-hero-landing.png)
+![Hero Section](assets/screenshots/hero-landing.png)
 
 ---
 
 ## 2️⃣ Resume Analysis – Upload & Job Description
-![Resume Upload](assets/screenshots/02-analyze-resume-upload.png)
+![Resume Upload](assets/screenshots/analyze-resume-upload.png)
 
 ---
 
 ## 3️⃣ Match Verification – Deep Breakdown
 
 ### 🔎 Overview
-![Match Overview](assets/screenshots/03-match-overview.png)
+![Match Overview](assets/screenshots/match-overview.png)
 
 ### 🧠 Skills Analysis
-![Match Skills](assets/screenshots/04-match-skills.png)
+![Match Skills](assets/screenshots/match-skills.png)
 
 ### 💬 AI Explanation
-![Match Explanation](assets/screenshots/05-match-explanation.png)
+![Match Explanation](assets/screenshots/match-explanation.png)
 
 ---
 
 ## 4️⃣ Batch Candidate Ranking
-![Batch Ranking](assets/screenshots/06-batch-ranking.png)
+![Batch Ranking](assets/screenshots/batch-ranking.png)
 
 ---
 
 ## 5️⃣ Skill Extraction Engine
-![Extract Skills](assets/screenshots/07-extract-skills.png)
+![Extract Skills](assets/screenshots/extract-skills.png)
 
 ---
 
