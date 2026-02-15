@@ -1,0 +1,56 @@
+MIKE JOHNSON
+mike.johnson@email.com | (555) 456-7890 | Austin, TX | linkedin.com/in/mikejohnson
+
+PROFESSIONAL SUMMARY
+DevOps Engineer with 6 years of experience in cloud infrastructure, CI/CD automation, and system reliability. Expert in AWS, Kubernetes, and Infrastructure as Code. Proven ability to optimize deployment processes and improve system performance.
+
+TECHNICAL SKILLS
+- Cloud: AWS (EC2, S3, RDS, Lambda, ECS, EKS), Azure
+- Containers: Docker, Kubernetes, Helm
+- CI/CD: Jenkins, GitLab CI, GitHub Actions, ArgoCD
+- IaC: Terraform, CloudFormation, Ansible, Pulumi
+- Monitoring: Prometheus, Grafana, Datadog, ELK Stack
+- Scripting: Python, Bash, Go, PowerShell
+- Security: Vault, AWS IAM, SSL/TLS, Compliance
+- Version Control: Git, GitHub, GitLab, Bitbucket
+
+PROFESSIONAL EXPERIENCE
+
+Senior DevOps Engineer | CloudTech Solutions | Austin, TX | 2020 - Present
+- Architected and managed AWS infrastructure serving 5M+ users
+- Implemented GitOps workflow using ArgoCD and Kubernetes
+- Reduced infrastructure costs by 40% through optimization
+- Built CI/CD pipelines deploying 50+ microservices
+- Implemented Infrastructure as Code using Terraform
+- Set up monitoring and alerting with Prometheus and Grafana
+- Led migration from on-premise to cloud-native architecture
+
+DevOps Engineer | ScaleUp Inc | Dallas, TX | 2018 - 2020
+- Managed Kubernetes clusters and container orchestration
+- Built automated deployment pipelines with Jenkins
+- Implemented Docker containerization for all applications
+- Created Terraform modules for infrastructure provisioning
+- Configured monitoring with Datadog and PagerDuty
+- Ensured 99.9% uptime for production systems
+
+Systems Administrator | TechOps | Houston, TX | 2016 - 2018
+- Managed Linux servers and network infrastructure
+- Implemented configuration management with Ansible
+- Automated routine tasks using Python and Bash scripts
+- Maintained backup and disaster recovery systems
+
+EDUCATION
+Bachelor of Science in Information Technology
+University of Texas at Austin | Graduated: 2016
+
+CERTIFICATIONS
+- AWS Certified Solutions Architect - Professional
+- AWS Certified DevOps Engineer - Professional
+- Certified Kubernetes Administrator (CKA)
+- HashiCorp Certified: Terraform Associate
+- Docker Certified Associate
+
+PROJECTS
+- Contributed to open-source Terraform AWS modules
+- Built custom Kubernetes operators for internal tools
+- Speaker at DevOpsDays Austin 2022

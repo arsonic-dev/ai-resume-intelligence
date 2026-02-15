@@ -1,0 +1,36 @@
+Senior Python Developer
+
+Company: TechCorp Solutions
+Location: San Francisco, CA (Remote Available)
+Employment Type: Full-time
+
+About the Role:
+We are seeking an experienced Senior Python Developer to join our engineering team. The ideal candidate will have a strong background in backend development, API design, and cloud technologies.
+
+Responsibilities:
+- Design and develop scalable backend services using Python
+- Build and maintain RESTful APIs and microservices
+- Work with databases (PostgreSQL, MongoDB) and data modeling
+- Implement CI/CD pipelines and DevOps practices
+- Collaborate with frontend developers and product managers
+- Mentor junior developers and conduct code reviews
+
+Required Skills:
+- 5+ years of professional Python development experience
+- Strong expertise in Django or FastAPI frameworks
+- Experience with SQL and NoSQL databases
+- Proficiency in Docker and Kubernetes
+- AWS or other cloud platform experience
+- Git version control and collaborative development
+
+Nice to Have:
+- Machine Learning experience (TensorFlow, PyTorch)
+- Knowledge of message queues (RabbitMQ, Kafka)
+- Experience with GraphQL
+- Contributions to open-source projects
+
+Benefits:
+- Competitive salary and equity
+- Health, dental, and vision insurance
+- Flexible PTO and remote work options
+- Professional development budget

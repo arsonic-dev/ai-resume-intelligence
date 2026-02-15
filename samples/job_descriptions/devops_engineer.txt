@@ -1,0 +1,37 @@
+DevOps Engineer
+
+Company: CloudFirst Technologies
+Location: Austin, TX (Hybrid)
+Employment Type: Full-time
+
+About the Role:
+We are seeking a skilled DevOps Engineer to help us build and maintain our cloud infrastructure. You will be responsible for automating deployments, managing CI/CD pipelines, and ensuring system reliability.
+
+Responsibilities:
+- Design and maintain cloud infrastructure on AWS
+- Build and optimize CI/CD pipelines
+- Implement Infrastructure as Code using Terraform
+- Monitor system performance and troubleshoot issues
+- Ensure security best practices across all systems
+- Collaborate with development teams to improve deployment processes
+
+Required Skills:
+- 4+ years of DevOps or SRE experience
+- Strong AWS knowledge (EC2, S3, RDS, Lambda, ECS)
+- Proficiency in Docker and Kubernetes
+- Experience with CI/CD tools (Jenkins, GitLab CI, or GitHub Actions)
+- Infrastructure as Code (Terraform, CloudFormation, or Ansible)
+- Scripting skills (Python, Bash, or Go)
+- Linux system administration
+
+Nice to Have:
+- AWS certifications (Solutions Architect, DevOps Engineer)
+- Experience with monitoring tools (Prometheus, Grafana, Datadog)
+- Knowledge of service mesh (Istio, Linkerd)
+- Security and compliance experience
+
+Benefits:
+- Competitive compensation package
+- Health and wellness benefits
+- Flexible work arrangements
+- Certification reimbursement

@@ -1,0 +1,36 @@
+Data Scientist - Machine Learning
+
+Company: DataDriven Inc.
+Location: New York, NY
+Employment Type: Full-time
+
+About the Role:
+We are looking for a talented Data Scientist to help us build intelligent products using machine learning and statistical modeling. You will work with large datasets and cutting-edge ML algorithms.
+
+Responsibilities:
+- Develop and deploy machine learning models to production
+- Perform exploratory data analysis and statistical modeling
+- Build NLP and computer vision solutions
+- Collaborate with engineering teams to implement ML pipelines
+- Present findings to stakeholders and business teams
+- Stay current with latest ML research and techniques
+
+Required Skills:
+- 3+ years of experience in Data Science or ML Engineering
+- Strong proficiency in Python, Pandas, NumPy, and scikit-learn
+- Experience with deep learning frameworks (TensorFlow or PyTorch)
+- Solid understanding of statistics and probability
+- SQL and data manipulation skills
+- Experience with cloud platforms (AWS, GCP, or Azure)
+
+Nice to Have:
+- PhD or Master's in Computer Science, Statistics, or related field
+- Experience with MLOps and model deployment
+- Knowledge of big data technologies (Spark, Hadoop)
+- Published research or conference presentations
+
+Benefits:
+- Competitive salary + bonus
+- Comprehensive health benefits
+- 401(k) matching
+- Continuous learning opportunities

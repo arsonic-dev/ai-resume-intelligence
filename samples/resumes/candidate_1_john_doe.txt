@@ -1,0 +1,48 @@
+JOHN DOE
+john.doe@email.com | (555) 123-4567 | San Francisco, CA | linkedin.com/in/johndoe
+
+PROFESSIONAL SUMMARY
+Senior Software Engineer with 7 years of experience in Python development, backend systems, and cloud infrastructure. Proven track record of building scalable applications and leading development teams. Strong expertise in Django, FastAPI, and AWS.
+
+TECHNICAL SKILLS
+- Languages: Python, JavaScript, SQL, Bash
+- Frameworks: Django, FastAPI, Flask, React
+- Databases: PostgreSQL, MongoDB, Redis, Elasticsearch
+- Cloud & DevOps: AWS (EC2, S3, RDS, Lambda), Docker, Kubernetes, Terraform
+- Tools: Git, Jenkins, GitHub Actions, Jira, Confluence
+- Other: REST API design, Microservices, CI/CD, Agile/Scrum
+
+PROFESSIONAL EXPERIENCE
+
+Senior Python Developer | TechStart Inc. | San Francisco, CA | 2019 - Present
+- Led development of microservices architecture serving 1M+ daily users
+- Designed and implemented RESTful APIs using FastAPI and Django
+- Managed AWS infrastructure including EC2, S3, RDS, and Lambda functions
+- Implemented Docker containers and Kubernetes orchestration
+- Mentored team of 5 junior developers and conducted code reviews
+- Reduced deployment time by 60% through CI/CD automation
+
+Software Engineer | CodeWorks LLC | San Jose, CA | 2017 - 2019
+- Developed backend services using Python and Django
+- Built data pipelines processing 10TB+ daily
+- Implemented machine learning models for recommendation systems
+- Worked with PostgreSQL and MongoDB databases
+- Collaborated with frontend team using React and JavaScript
+
+Junior Developer | WebSolutions | Palo Alto, CA | 2016 - 2017
+- Developed web applications using Python and Flask
+- Maintained Linux servers and deployment scripts
+- Created automated testing frameworks
+
+EDUCATION
+Bachelor of Science in Computer Science
+Stanford University | Graduated: 2016
+
+CERTIFICATIONS
+- AWS Certified Solutions Architect
+- Docker Certified Associate
+- Certified Kubernetes Administrator (CKA)
+
+PROJECTS
+- Open-source Python library for API testing (2k+ GitHub stars)
+- Personal blog on Python best practices (50k+ monthly readers)
