@@ -1,225 +1,143 @@
-# AI Resume Intelligence Platform
 
-### Explainable NLP-Based Candidate--Job Matching System
+# AI Resume Intelligence Platform  
+### Explainable Hybrid NLP System for Intelligent Candidate–Job Matching
 
-An end-to-end AI-powered hiring intelligence platform that combines
-transformer-based semantic similarity with structured skill analysis to
-evaluate resume--job alignment.
+An end-to-end AI-powered hiring intelligence platform combining transformer-based semantic similarity with structured skill intelligence and interpretable scoring mechanisms.
 
-This project bridges modern NLP research with production-oriented ML
-system design, demonstrating how embedding models can be deployed within
-an interpretable, modular architecture suitable for real-world
-applications.
+---
 
-------------------------------------------------------------------------
+# 🚀 Product Vision
 
-## 🚀 Overview
+Traditional ATS systems rely on brittle keyword matching, ignoring contextual and semantic alignment between resumes and job descriptions.
 
-Traditional applicant tracking systems rely heavily on keyword matching,
-often missing deeper semantic alignment between resumes and job
-descriptions.
+This platform introduces a hybrid scoring pipeline that combines:
 
-This platform implements:
+- Transformer-based contextual embeddings  
+- Structured skill extraction  
+- Weighted multi-signal scoring  
+- Explainable reasoning generation  
+- Batch candidate ranking  
+- Interactive visualization dashboard  
 
--   Transformer-based sentence embeddings (MiniLM)
--   Structured skill extraction and categorization
--   Hybrid weighted similarity scoring
--   Explainable AI breakdown
--   Batch candidate ranking
--   Interactive SaaS-style visualization dashboard
+---
 
-The system is modular, scalable, and designed for extensibility.
+# 🖥️ Product Interface Walkthrough
 
-------------------------------------------------------------------------
+## 1️⃣ Landing – Hero Section
+![Hero Section](assets/screenshots/01-hero-landing.png)
 
-## 🧠 System Architecture
+---
 
-    Resume (PDF/DOCX)
-            ↓
-    Document Parser
-            ↓
-    Skill Extraction Engine
-            ↓
-    Sentence Embedding Model (MiniLM)
-            ↓
-    Cosine Similarity
-            ↓
-    Hybrid Scoring Engine
-            ↓
-    Explainability Layer
-            ↓
-    Interactive Dashboard (Streamlit)
+## 2️⃣ Resume Analysis – Upload & Job Description
+![Resume Upload](assets/screenshots/02-analyze-resume-upload.png)
 
-------------------------------------------------------------------------
+---
 
-## 🔬 Modeling Approach
+## 3️⃣ Match Verification – Deep Breakdown
 
-### 1️⃣ Semantic Similarity
+### 🔎 Overview
+![Match Overview](assets/screenshots/03-match-overview.png)
 
--   Model: `all-MiniLM-L6-v2` (SentenceTransformers)
--   Embedding dimension: 384
--   Similarity metric: Cosine similarity
+### 🧠 Skills Analysis
+![Match Skills](assets/screenshots/04-match-skills.png)
 
-Why MiniLM?
+### 💬 AI Explanation
+![Match Explanation](assets/screenshots/05-match-explanation.png)
 
--   Balanced accuracy and inference speed
--   Lightweight for CPU deployment
--   Strong benchmark performance
+---
 
-------------------------------------------------------------------------
+## 4️⃣ Batch Candidate Ranking
+![Batch Ranking](assets/screenshots/06-batch-ranking.png)
 
-### 2️⃣ Skill Extraction
+---
 
--   Technical and soft skill categorization
--   Category-based grouping
--   Matched / Missing / Extra comparison
+## 5️⃣ Skill Extraction Engine
+![Extract Skills](assets/screenshots/07-extract-skills.png)
 
-Structured signals improve interpretability and robustness.
+---
 
-------------------------------------------------------------------------
+# 🏗️ System Architecture
 
-### 3️⃣ Hybrid Scoring Engine
+![System Architecture](assets/architecture/system-architecture.png)
 
-Final match score combines:
+### Architecture Flow
 
--   Semantic similarity
--   Skill overlap score
--   Experience alignment heuristic
+Resume → Parser → Skill Extractor → Embedding Model → Similarity Engine → Hybrid Scoring → Explanation → Dashboard
 
-------------------------------------------------------------------------
+---
 
-## 📊 Experimental Evaluation
+# 🔬 Machine Learning Pipeline
 
-Small-scale manual evaluation:
+![ML Pipeline](assets/architecture/ml-pipeline.png)
 
-  Resume Type      Job Description   Expected   Predicted
-  ---------------- ----------------- ---------- -----------
-  Python Dev       Python Backend    High       87%
-  Java Dev         Python Backend    Low        34%
-  Data Scientist   ML Role           High       82%
+### Pipeline Steps
 
-Observations:
+1. Resume Text Extraction  
+2. Job Description Processing  
+3. Sentence Embedding Generation  
+4. Skill Matching  
+5. Cosine Similarity Computation  
+6. Weighted Score Calculation  
+7. Explanation Generation  
+8. Ranking Output  
 
--   Embeddings capture contextual alignment effectively.
--   Skill overlap enhances explainability.
--   Hybrid scoring reduces false positives.
+---
 
-------------------------------------------------------------------------
+# ⚙️ Technology Stack
 
-## 🧩 Core Features
+| Layer          | Technology |
+|---------------|------------|
+| NLP Model     | SentenceTransformers (MiniLM) |
+| Backend       | FastAPI |
+| Frontend      | Streamlit |
+| Visualization | Plotly |
+| Parsing       | PyPDF2, python-docx |
+| ML Utilities  | scikit-learn |
+| Data Handling | Pandas |
 
--   Explainable match scoring
--   Skill gap analysis
--   Radar & gauge visualization
--   Batch ranking
--   Dark SaaS-style UI
--   CPU-friendly inference
+---
 
-------------------------------------------------------------------------
+# ⚙️ Installation
 
-## 🛠 Tech Stack
-
-  Layer           Technology
-  --------------- -------------------------------
-  NLP Model       SentenceTransformers (MiniLM)
-  Backend         Python, FastAPI
-  Frontend        Streamlit
-  Visualization   Plotly
-  Parsing         PyPDF2, python-docx
-  ML Utilities    scikit-learn
-
-------------------------------------------------------------------------
-
-## ⚙ Installation
-
-``` bash
-git clone https://github.com/yourusername/ai-resume-intelligence.git
+```bash
+git clone https://github.com/arsonic-dev/ai-resume-intelligence.git
 cd ai-resume-intelligence
 
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
+venv\Scripts\activate   # Windows
 
 pip install -r requirements.txt
 ```
 
-Run backend:
+---
 
-``` bash
-cd backend
-uvicorn main:app --reload
-```
+# 📁 Project Structure
 
-Run frontend:
+ai-resume-intelligence/
+├── backend/
+├── frontend/
+├── assets/
+│   ├── screenshots/
+│   └── architecture/
+├── requirements.txt
+└── README.md
 
-``` bash
-cd frontend
-streamlit run app.py
-```
+---
 
-------------------------------------------------------------------------
+# 🔮 Roadmap
 
-## 🔌 API Overview
+- Cross-encoder re-ranking stage
+- Fairness-aware evaluation metrics
+- Dockerized deployment
+- CI/CD integration
+- Production cloud deployment
 
--   POST /analyze → Analyze single resume
--   POST /batch → Rank multiple resumes
--   GET /health → Health check
+---
 
-------------------------------------------------------------------------
+# 👤 Author
 
-## 📁 Project Structure
+Ankit Kumar  
+AI / ML Engineer  
 
-    AI-Resume-Intelligence/
-    │
-    ├── backend/
-    │   ├── main.py
-    │   ├── similarity.py
-    │   ├── skill_extractor.py
-    │   └── parser.py
-    │
-    ├── frontend/
-    │   └── app.py
-    │
-    ├── requirements.txt
-    └── README.md
-
-------------------------------------------------------------------------
-
-## ⚠️ Limitations
-
--   No domain-specific fine-tuning
--   Partially rule-based skill extraction
--   Small evaluation dataset
--   No fairness audit
--   Simplified experience heuristic
-
-------------------------------------------------------------------------
-
-## 🔮 Future Improvements
-
--   Fine-tuned embeddings
--   Cross-encoder re-ranking
--   Fairness-aware scoring
--   Feedback-driven retraining
--   Dockerized deployment
-
-------------------------------------------------------------------------
-
-## 💼 Industry Relevance
-
-Demonstrates:
-
--   End-to-end ML system design
--   Transformer integration
--   Hybrid feature engineering
--   Explainable AI
--   Modular architecture
--   Production-oriented thinking
-
-------------------------------------------------------------------------
-
-## 👤 Author
-
-Ankit Kumar\
-AI / ML Engineer\
-LinkedIn: https://linkedin.com/in/ankit-kumar-btech-cse/   
-GitHub: https://github.com/arsonic-dev
+LinkedIn: https://linkedin.com/in/ankit-kumar-btech-cse/  
+GitHub: https://github.com/arsonic-dev  
