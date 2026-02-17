@@ -139,5 +139,6 @@ ai-resume-intelligence/
 Ankit Kumar  
 AI / ML Engineer  
 
+Gmail: kumarankit9065@gmail.com
 LinkedIn: https://linkedin.com/in/ankit-kumar-btech-cse/  
 GitHub: https://github.com/arsonic-dev  
