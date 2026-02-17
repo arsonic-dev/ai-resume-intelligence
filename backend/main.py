@@ -25,9 +25,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 # Import our modules
-from parser import DocumentParser, parse_resume_bytes
-from skill_extractor import SkillExtractor, SkillExtractionResult
-from similarity import SimilarityEngine, SimilarityResult
+from backend.parser import DocumentParser, parse_resume_bytes
+from backend.skill_extractor import SkillExtractor, SkillExtractionResult
+from backend.similarity import SimilarityEngine, SimilarityResult
 
 # Configure logging
 logging.basicConfig(
