@@ -1,0 +1,47 @@
+SARAH WILLIAMS
+sarah.williams@email.com | (555) 234-5678 | Seattle, WA | linkedin.com/in/sarahwilliams
+
+PROFESSIONAL SUMMARY
+Full Stack Developer with 4 years of experience building web applications. Strong skills in JavaScript, React, Node.js, and Python. Passionate about creating user-friendly applications and learning new technologies.
+
+TECHNICAL SKILLS
+- Frontend: JavaScript, TypeScript, React, Vue.js, HTML5, CSS3, Sass
+- Backend: Node.js, Express, Python, Flask
+- Databases: MySQL, PostgreSQL, MongoDB
+- Tools: Git, npm, webpack, Jest, Cypress
+- Cloud: Heroku, Netlify, Firebase
+- Other: REST APIs, GraphQL, Agile methodology
+
+PROFESSIONAL EXPERIENCE
+
+Full Stack Developer | WebCreations | Seattle, WA | 2021 - Present
+- Developed responsive web applications using React and Node.js
+- Built RESTful APIs and integrated third-party services
+- Implemented authentication and authorization systems
+- Collaborated with UX/UI designers on product features
+- Participated in agile sprints and code reviews
+
+Frontend Developer | Digital Agency | Portland, OR | 2019 - 2021
+- Created interactive user interfaces with React and Vue.js
+- Optimized website performance and SEO
+- Implemented responsive designs for mobile compatibility
+- Worked with design teams using Figma and Sketch
+
+Junior Web Developer | StartupXYZ | Seattle, WA | 2018 - 2019
+- Built landing pages and marketing websites
+- Maintained and updated existing web applications
+- Assisted with database management and queries
+
+EDUCATION
+Bachelor of Science in Computer Science
+University of Washington | Graduated: 2018
+
+COURSES & CERTIFICATIONS
+- Full Stack Web Development Bootcamp
+- JavaScript Algorithms and Data Structures
+- React - The Complete Guide
+
+PROJECTS
+- Personal portfolio website with React and Node.js
+- E-commerce application with payment integration
+- Weather app using external APIs

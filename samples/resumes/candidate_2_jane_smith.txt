@@ -1,0 +1,52 @@
+JANE SMITH
+jane.smith@email.com | (555) 987-6543 | New York, NY | linkedin.com/in/janesmith
+
+PROFESSIONAL SUMMARY
+Data Scientist with 5 years of experience in machine learning, statistical modeling, and data analysis. Expertise in building predictive models and deploying ML solutions to production. Strong background in Python, TensorFlow, and cloud platforms.
+
+TECHNICAL SKILLS
+- Languages: Python, R, SQL
+- ML/DL: TensorFlow, PyTorch, scikit-learn, XGBoost, Keras
+- Data: Pandas, NumPy, Spark, Hadoop
+- NLP: NLTK, spaCy, Hugging Face Transformers
+- Visualization: Matplotlib, Seaborn, Plotly, Tableau
+- Cloud: AWS (SageMaker, EC2, S3), Google Cloud Platform
+- Tools: Jupyter, Git, Docker, Kubernetes
+
+PROFESSIONAL EXPERIENCE
+
+Senior Data Scientist | AnalyticsPro | New York, NY | 2020 - Present
+- Built recommendation engine increasing user engagement by 35%
+- Developed NLP models for sentiment analysis and text classification
+- Deployed machine learning models to production using AWS SageMaker
+- Led team of 3 data scientists on computer vision projects
+- Implemented MLOps pipelines for model versioning and monitoring
+- Presented insights to C-level executives and stakeholders
+
+Data Scientist | DataCorp | Boston, MA | 2018 - 2020
+- Developed predictive models for customer churn (85% accuracy)
+- Built data pipelines processing 50M+ records daily
+- Created interactive dashboards using Tableau and Plotly
+- Collaborated with engineering team on model deployment
+- Conducted A/B tests and statistical analyses
+
+Data Analyst | Insight Analytics | Cambridge, MA | 2017 - 2018
+- Performed exploratory data analysis on large datasets
+- Created SQL queries and reports for business intelligence
+- Built predictive models using Python and scikit-learn
+
+EDUCATION
+Master of Science in Data Science
+Massachusetts Institute of Technology | Graduated: 2017
+
+Bachelor of Science in Statistics
+University of California, Berkeley | Graduated: 2015
+
+PUBLICATIONS & RESEARCH
+- "Deep Learning Approaches for NLP" - Published in ML Conference 2022
+- "Predictive Modeling in E-commerce" - Journal of Data Science, 2021
+
+CERTIFICATIONS
+- AWS Certified Machine Learning - Specialty
+- Google Cloud Professional Data Engineer
+- TensorFlow Developer Certificate
