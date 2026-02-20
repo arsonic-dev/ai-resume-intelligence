@@ -292,53 +292,66 @@ async def batch_rank_resumes_endpoint(
     jd_text: str = Form(...),
     jd_title: Optional[str] = Form(None)
 ):
-    """
-    Upload multiple resumes and rank them against a job description.
-    
-    Args:
-        files: List of resume files (PDF or DOCX)
-        jd_text: Job description text
-        jd_title: Optional job title
-        
-    Returns:
-        BatchMatchResponse with ranked resumes
-    """
+
     logger.info(f"Received {len(files)} resumes for ranking")
-    
+
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded")
-    
+
     try:
-        # Extract skills from JD
+        ranked = []
+
+        # Extract JD skills ONCE
         jd_skills_result = skill_extractor.extract_skills(jd_text)
-        
-        # Parse all resumes
-        resumes = []
+
         for file in files:
             content = await file.read()
             parsed = parse_resume_bytes(content, file.filename)
-            
-            if parsed['success']:
-                resume_skills = skill_extractor.extract_skills(parsed['text'])
-                resumes.append({
-                    'filename': parsed['filename'],
-                    'text': parsed['text'],
-                    'skills': resume_skills.all_skills
-                })
-        
-        # Rank resumes
-        ranked = similarity_engine.rank_resumes(
-            resumes=resumes,
-            jd_text=jd_text,
-            jd_skills=jd_skills_result.all_skills
-        )
-        
+
+            if not parsed['success']:
+                continue
+
+            resume_text = parsed['text']
+
+            # Extract resume skills
+            resume_skills_result = skill_extractor.extract_skills(resume_text)
+
+            # Compare skills
+            skill_comparison = skill_extractor.compare_skills(
+                resume_skills_result,
+                jd_skills_result
+            )
+
+            # Use SAME scoring engine as single analyze
+            similarity_result = similarity_engine.calculate_similarity(
+                resume_text=resume_text,
+                jd_text=jd_text,
+                resume_skills=resume_skills_result.all_skills,
+                jd_skills=jd_skills_result.all_skills,
+                matched_skills=skill_comparison['matched_skills'],
+                missing_skills=skill_comparison['missing_skills']
+            )
+
+            ranked.append({
+                "filename": parsed['filename'],
+                "match_score": similarity_result.match_score,
+                "semantic_similarity": similarity_result.semantic_similarity,
+                "skill_match_score": similarity_result.skill_match_score,
+                "explanation": similarity_result.explanation,
+                "matched_skills": skill_comparison['matched_skills'],
+                "missing_skills": skill_comparison['missing_skills'],
+                "extra_skills": skill_comparison['extra_skills']
+            })
+
+        # Sort by score descending
+        ranked = sorted(ranked, key=lambda x: x['match_score'], reverse=True)
+
         return BatchMatchResponse(
             rankings=ranked,
             total_resumes=len(ranked),
             jd_title=jd_title
         )
-        
+
     except Exception as e:
         logger.error(f"Error ranking resumes: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
