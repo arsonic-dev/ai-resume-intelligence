@@ -1,4 +1,16 @@
+<<<<<<< HEAD
 
+=======
+---
+title: AI Resume Backend
+emoji: 🚀
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
+>>>>>>> hf-clean
 # AI Resume Intelligence Platform  
 ### Explainable Hybrid NLP System for Intelligent Candidate–Job Matching
 
